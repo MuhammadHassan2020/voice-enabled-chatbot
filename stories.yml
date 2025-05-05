@@ -1,0 +1,91 @@
+version: "3.1"
+
+stories:
+
+- story: happy path
+  steps:
+    - intent: greet
+    - action: utter_greet
+    - intent: mood_great
+    - action: utter_happy
+
+- story: sad path 1
+  steps:
+    - intent: greet
+    - action: utter_greet
+    - intent: mood_unhappy
+    - action: utter_cheer_up
+    - action: utter_did_that_help
+    - intent: affirm
+    - action: utter_happy
+
+- story: sad path 2
+  steps:
+    - intent: greet
+    - action: utter_greet
+    - intent: mood_unhappy
+    - action: utter_cheer_up
+    - action: utter_did_that_help
+    - intent: deny
+    - action: utter_goodbye
+
+- story: user is happy
+  steps:
+    - intent: mood_great
+    - action: utter_happy
+
+- story: user is unhappy
+  steps:
+    - intent: mood_unhappy
+    - action: utter_cheer_up
+    - action: utter_did_that_help
+
+- story: ask about wellbeing
+  steps:
+    - intent: ask_wellbeing
+    - action: utter_wellbeing
+
+- story: user says they're doing good
+  steps:
+    - intent: tell_feeling_good
+    - action: utter_feeling_good
+
+- story: ask course
+  steps:
+    - intent: ask_course
+    - action: utter_course
+
+- story: ask what do you do
+  steps:
+    - intent: ask_bot_job
+    - action: utter_bot_job
+
+- story: ask origin
+  steps:
+    - intent: ask_origin
+    - action: utter_origin
+
+- story: ask subject opinion
+  steps:
+    - intent: ask_subject_opinion
+    - action: utter_subject_opinion
+
+- story: ask university location
+  steps:
+    - intent: ask_university_location
+    - action: utter_university_location
+
+- story: ask aim in life
+  steps:
+    - intent: ask_aim
+    - action: utter_aim
+
+- story: ask learning goal
+  steps:
+    - intent: ask_learning_goal
+    - action: utter_learning_goal
+
+- story: user says thanks
+  steps:
+    - intent: gratitude
+    - action: utter_gratitude

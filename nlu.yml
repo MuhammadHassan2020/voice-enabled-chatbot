@@ -1,0 +1,111 @@
+version: "3.1"
+nlu:
+  - intent: greet
+    examples: |
+      - hi
+      - hello
+      - hey
+      - good morning
+      - good evening
+      - good afternoon
+
+  - intent: ask_wellbeing
+    examples: |
+      - how are you
+      - how are you doing
+      - how's everything
+
+  - intent: mood_great
+    examples: |
+      - I'm feeling great
+      - awesome
+      - life is good
+      
+
+  - intent: mood_unhappy
+    examples: |
+      - I'm sad
+      - not good
+      - feeling down
+      - I am not happy
+
+  - intent: deny
+    examples: |
+      - no
+      - nope
+      - never
+      - I don't think so
+
+  - intent: affirm
+    examples: |
+      - yes
+      - yeah
+      - of course
+      - definitely
+
+  - intent: ask_bot_job
+    examples: |
+      - what do you do?
+      - what is your job?
+      - what were you made for?
+      - what are you designed to do?
+
+  - intent: ask_course
+    examples: |
+      - what do you study?
+      - what are you lstudying?
+      - what is your course about?
+      - which subject are you learning?
+      - what is your course?
+
+  - intent: tell_feeling_good
+    examples: |
+      - I'm good
+      - doing well
+      - I'm okay
+      - everything is fine
+
+  - intent: ask_origin
+    examples: |
+      - where are you from
+      - what is your origin
+
+  - intent: ask_university_location
+    examples: |
+      - Where is your university?
+      - Where do you study?
+      - Which university are you in?
+      - Where is your college located?
+      - What's the location of your university?
+
+  - intent: ask_subject_opinion
+    examples: |
+      - do you like your subject
+      - are you enjoying your course
+      - do you like what you're studying
+
+  - intent: ask_aim
+    examples: |
+      - what is your aim in life
+      - what do you want to achieve
+      - what's your goal
+
+  - intent: ask_learning_goal
+    examples: |
+      - what do you want to learn in your course
+      - what are your learning goals
+      - what do you want to improve
+
+  - intent: goodbye
+    examples: |
+      - bye
+      - see you
+      - goodbye
+
+  - intent: gratitude
+    examples: |
+      - thanks
+      - thank you
+      - appreciate it
+      - cheers
+      - thanks for asking

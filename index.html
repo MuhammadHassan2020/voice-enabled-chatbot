@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RASA Voice Assistant</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0f0f0;
+      text-align: center;
+      padding: 30px;
+    }
+    #chat {
+      width: 90%;
+      max-width: 600px;
+      height: 400px;
+      margin: 20px auto;
+      padding: 10px;
+      overflow-y: scroll;
+      background: white;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+    .msg {
+      margin: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      max-width: 80%;
+    }
+    .user { background: #dcf8c6; text-align: right; margin-left: auto; }
+    .bot { background: #eee; text-align: left; margin-right: auto; }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      margin-top: 10px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🎤 Rasa Voice Assistant</h2>
+  <div id="chat"></div>
+  <button id="mic" title="Press 'S' to start voice chat">🎙️ Tap to Start Voice Chat</button>
+
+  <script>
+    const chat = document.getElementById("chat");
+    const micBtn = document.getElementById("mic");
+
+    let listening = false;
+    let inactivityTimer;
+
+    function appendMessage(text, className) {
+      const div = document.createElement("div");
+      div.className = `msg ${className}`;
+      div.textContent = text;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function sendToRasa(text) {
+      appendMessage(text, "user");
+      resetInactivityTimer();
+
+      fetch("http://localhost:5005/webhooks/rest/webhook", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sender: "user", message: text })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.length) {
+          data.forEach(msg => {
+            if (msg.text) {
+              appendMessage(msg.text, "bot");
+              speak(msg.text);
+            }
+          });
+        } else {
+          appendMessage("🤖 I didn’t get a reply from the assistant.", "bot");
+        }
+      })
+      .catch(err => {
+        console.error("Rasa server error:", err);
+        appendMessage("Oops! I couldn't reach the server.", "bot");
+        speak("Oops! I couldn't reach the server.");
+      });
+    }
+
+    function speak(text) {
+      const utterance = new SpeechSynthesisUtterance(text);
+
+      // Stop listening to prevent echo
+      if (listening) {
+        recognition.stop();
+      }
+
+      micBtn.textContent = "🗣️ Speaking...";
+      speechSynthesis.speak(utterance);
+
+      utterance.onend = () => {
+        if (listening) {
+          recognition.start();
+          micBtn.textContent = "🎧 Listening...";
+        } else {
+          micBtn.textContent = "🎙️ Tap to Start Voice Chat";
+        }
+      };
+    }
+
+    // 🎤 Voice input setup
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.continuous = true;
+
+    micBtn.onclick = () => {
+      if (!listening) {
+        listening = true;
+        recognition.start();
+        micBtn.textContent = "🎧 Listening...";
+        resetInactivityTimer();
+      }
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase();
+      sendToRasa(transcript);
+
+      if (transcript.includes("bye") || transcript.includes("goodbye")) {
+        speak("Goodbye! Take care.");
+        appendMessage("Goodbye! Take care.", "bot");
+        recognition.stop();
+        listening = false;
+        micBtn.textContent = "🎙️ Tap to Start Voice Chat";
+        clearTimeout(inactivityTimer);
+      }
+    };
+
+    recognition.onend = () => {
+      if (listening) {
+        recognition.start(); // auto-restart if still active
+      }
+    };
+
+    recognition.onerror = (event) => {
+      console.log("Speech recognition error:", event.error);
+      micBtn.textContent = "🎙️ Tap to Start Voice Chat";
+    };
+
+    function resetInactivityTimer() {
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(() => {
+        speak("Goodbye! You've been silent for a while.");
+        appendMessage("Goodbye! You've been silent for a while.", "bot");
+        recognition.stop();
+        listening = false;
+        micBtn.textContent = "🎙️ Tap to Start Voice Chat";
+      }, 60000); // 1 minute
+    }
+
+    // 🟢 Keyboard shortcut: Press "S" to start voice
+    document.addEventListener("keydown", (e) => {
+      if (e.key.toLowerCase() === "s") {
+        micBtn.click();
+      }
+    });
+  </script>
+
+</body>
+</html>

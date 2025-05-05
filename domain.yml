@@ -1,0 +1,76 @@
+version: "3.1"
+
+intents:
+  - greet
+  - ask_wellbeing
+  - ask_course
+  - gratitude
+  - nlu_fallback
+  - ask_origin
+  - affirm
+  - deny
+  - mood_great
+  - mood_unhappy
+  - ask_subject_opinion
+  - ask_university_location
+  - ask_aim
+  - ask_learning_goal
+  - tell_feeling_good
+  - ask_bot_job
+  - goodbye
+
+responses:
+  utter_greet:
+    - text: "Hey there!"
+
+  utter_happy:
+    - text: that's awesome to hear!
+
+  
+  utter_bot_job:
+    - text: "I want to help people have meaningful conversations and be a helpful assistant."
+
+  utter_feeling_good:
+    - text: "Awesome to hear that!"
+
+  utter_gratitude:
+    - text: "You're welcome!"
+
+
+  utter_default:
+    - text: "Sorry, I didn't quite catch that. Could you rephrase?"
+
+  utter_university_location:
+    - text: "My university is LSBU which is located in London. It's a vibrant place full of innovation and culture!"
+
+  utter_wellbeing:
+    - text: "I'm great! Thanks for asking. How about you?"
+
+  utter_course:
+    - text: "I'm studying Artificial Intelligence and Natural Language Processing."
+
+  utter_origin:
+    - text: "I'm from the digital world huhhaha. But I learn from people like you!"
+
+
+  
+  utter_subject_opinion:
+    - text: "Yes! I love what I'm studying. It's fascinating and powerful."
+  utter_cheer_up:
+    - text: "Hey, cheer up! You're doing great."
+
+  utter_did_that_help:
+    - text: "Did that help a bit?"
+
+  utter_aim:
+    - text: "My aim is to assist people and learn continuously. I want to be useful and insightful."
+
+  utter_learning_goal:
+    - text: "I want to learn how to understand human language even better and hold meaningful conversations."
+
+  utter_goodbye:
+    - text: "Goodbye! Catch you later."
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
